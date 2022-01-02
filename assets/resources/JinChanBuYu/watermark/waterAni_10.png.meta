@@ -1,0 +1,36 @@
+{
+  "ver": "2.3.4",
+  "uuid": "7369c1cf-392a-405f-82b4-1d281b621efc",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 512,
+  "height": 512,
+  "platformSettings": {},
+  "subMetas": {
+    "waterAni_10": {
+      "ver": "1.0.4",
+      "uuid": "9e80e284-be6c-4ed2-842a-aefb270aff64",
+      "rawTextureUuid": "7369c1cf-392a-405f-82b4-1d281b621efc",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 512,
+      "height": 512,
+      "rawWidth": 512,
+      "rawHeight": 512,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

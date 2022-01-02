@@ -1,0 +1,36 @@
+{
+  "ver": "2.3.4",
+  "uuid": "8daf2f0d-093d-42fc-aaed-4974d5449023",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 1334,
+  "height": 747,
+  "platformSettings": {},
+  "subMetas": {
+    "BRBenz_BG": {
+      "ver": "1.0.4",
+      "uuid": "0da3cdf6-1f7e-4963-8465-4e57ad493c38",
+      "rawTextureUuid": "8daf2f0d-093d-42fc-aaed-4974d5449023",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 1334,
+      "height": 747,
+      "rawWidth": 1334,
+      "rawHeight": 747,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

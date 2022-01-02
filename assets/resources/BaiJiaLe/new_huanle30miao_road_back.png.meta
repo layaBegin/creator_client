@@ -1,0 +1,36 @@
+{
+  "ver": "2.3.4",
+  "uuid": "ee886bef-c59e-411e-9393-ddba69c4ac4d",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 835,
+  "height": 185,
+  "platformSettings": {},
+  "subMetas": {
+    "new_huanle30miao_road_back": {
+      "ver": "1.0.4",
+      "uuid": "0b71cd7f-ac71-4aa2-adae-41ce77d2580d",
+      "rawTextureUuid": "ee886bef-c59e-411e-9393-ddba69c4ac4d",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 835,
+      "height": 185,
+      "rawWidth": 835,
+      "rawHeight": 185,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

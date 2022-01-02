@@ -1,0 +1,17 @@
+info face="微软雅黑" size=40 bold=0 italic=0 charset="" unicode=1 stretchH=100 smooth=1 aa=1 padding=0,0,0,0 spacing=1,1 outline=0
+common lineHeight=40 base=26 scaleW=120 scaleH=102 pages=1 packed=0 alphaChnl=1 redChnl=0 greenChnl=0 blueChnl=0
+page id=0 file="xiazhu.png"
+chars count=13
+char id=48   x=24    y=68     width=24    height=34    xoffset=0     yoffset=0     xadvance=24    page=0  chnl=15
+char id=49   x=72    y=34     width=24    height=34    xoffset=0     yoffset=0     xadvance=24    page=0  chnl=15
+char id=50   x=48    y=68     width=24    height=34    xoffset=0     yoffset=0     xadvance=24    page=0  chnl=15
+char id=51   x=0    y=34     width=24    height=34    xoffset=0     yoffset=0     xadvance=24    page=0  chnl=15
+char id=52   x=24    y=34     width=24    height=34    xoffset=0     yoffset=0     xadvance=24    page=0  chnl=15
+char id=53   x=48    y=34     width=24    height=34    xoffset=0     yoffset=0     xadvance=24    page=0  chnl=15
+char id=54   x=72    y=68     width=24    height=34    xoffset=0     yoffset=0     xadvance=24    page=0  chnl=15
+char id=55   x=96    y=0     width=24    height=34    xoffset=0     yoffset=0     xadvance=24    page=0  chnl=15
+char id=56   x=96    y=34     width=24    height=34    xoffset=0     yoffset=0     xadvance=24    page=0  chnl=15
+char id=57   x=0    y=68     width=24    height=34    xoffset=0     yoffset=0     xadvance=24    page=0  chnl=15
+char id=19979   x=32    y=0     width=32    height=34    xoffset=0     yoffset=0     xadvance=32    page=0  chnl=15
+char id=27880   x=64    y=0     width=32    height=34    xoffset=0     yoffset=0     xadvance=32    page=0  chnl=15
+char id=20493   x=0    y=0     width=32    height=34    xoffset=0     yoffset=0     xadvance=32    page=0  chnl=15

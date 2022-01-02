@@ -1,0 +1,7 @@
+/build
+/jniLibs
+.externalNativeBuild
+chuangshiqp.iml
+local.properties
+build.gradle
+

@@ -1,0 +1,36 @@
+{
+  "ver": "2.3.4",
+  "uuid": "58c84386-bf95-41c0-b80c-312b3b959315",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 102,
+  "height": 102,
+  "platformSettings": {},
+  "subMetas": {
+    "dizhuLogo": {
+      "ver": "1.0.4",
+      "uuid": "ac9409c6-f5ff-4f1d-9e73-f7bed4aa4df3",
+      "rawTextureUuid": "58c84386-bf95-41c0-b80c-312b3b959315",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 102,
+      "height": 102,
+      "rawWidth": 102,
+      "rawHeight": 102,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

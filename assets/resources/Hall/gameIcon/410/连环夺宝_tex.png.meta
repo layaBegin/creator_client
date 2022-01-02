@@ -1,0 +1,36 @@
+{
+  "ver": "2.3.4",
+  "uuid": "dfeb6e40-aa19-4abe-bc07-4728bc30cd44",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 504,
+  "height": 328,
+  "platformSettings": {},
+  "subMetas": {
+    "连环夺宝_tex": {
+      "ver": "1.0.4",
+      "uuid": "ddff5960-c42e-474b-b99f-5062ac06c764",
+      "rawTextureUuid": "dfeb6e40-aa19-4abe-bc07-4728bc30cd44",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": -0.5,
+      "offsetY": 0.5,
+      "trimX": 1,
+      "trimY": 1,
+      "width": 501,
+      "height": 325,
+      "rawWidth": 504,
+      "rawHeight": 328,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

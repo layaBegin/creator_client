@@ -1,0 +1,32 @@
+library
+local
+temp
+packages
+## build
+build/*/res
+build/*/src
+build/*/main.js
+build/*/simulator
+build/*/publish
+build/*/js backups (useful for debugging)
+build/*/frameworks/runtime-src/proj.android-studio/app/release
+build/*/frameworks/cocos2d-x/cocos/platform/android/libcocos2dx/build
+###############
+jamblinghall.zip
+jamblinghall1.zip
+**/.vscode
+**/.idea
+
+packVersion/
+subPackage/
+
+settings/services.json
+
+## xcode
+xcuserdata
+*.xcuserdata
+###################
+
+## 安卓编译中间目录
+intermediates/
+####################

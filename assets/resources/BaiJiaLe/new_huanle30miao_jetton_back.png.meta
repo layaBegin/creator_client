@@ -1,0 +1,36 @@
+{
+  "ver": "2.3.4",
+  "uuid": "aefc53e7-bc1a-4a3f-bdf7-d816756fd570",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 910,
+  "height": 124,
+  "platformSettings": {},
+  "subMetas": {
+    "new_huanle30miao_jetton_back": {
+      "ver": "1.0.4",
+      "uuid": "f4cd92dd-73c9-46b7-a2a2-ff101865d958",
+      "rawTextureUuid": "aefc53e7-bc1a-4a3f-bdf7-d816756fd570",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": -0.5,
+      "offsetY": -2,
+      "trimX": 6,
+      "trimY": 4,
+      "width": 897,
+      "height": 120,
+      "rawWidth": 910,
+      "rawHeight": 124,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

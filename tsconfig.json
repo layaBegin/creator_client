@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "lib": [
+      "dom",
+      "es6",
+      "es2015.promise",
+      "es2015"
+    ],
+    "target": "es6",
+    "allowJs": true, // 这将编译js文件
+    // "noEmit": true, // 这将跳过js文件的编译
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "outDir": "temp/quick-scripts/"
+  },
+  "exclude": [
+    "node_modules",
+    "library",
+    "local",
+    "temp",
+    "build",
+    "settings"
+  ]
+}
+/*
+关于 "allowJs" 和 "noEmit" 说明
+对于TypeScript文件，默认情况下，TypeScript编译器会使用相同的基本文件名在同一目录中发出生成的JavaScript文件。
+由于TypeScript文件和发出的JavaScript文件始终具有不同的文件扩展名，因此可以安全地执行此操作。
+但是，如果您已将allowJs编译器选项设置为true并且未设置任何emit输出选项（outFile和outDir），则编译器将尝试通过相同的规则发出JavaScript源文件，
+这将导致发出的JavaScript文件具有相同的文件名与源文件。为避免意外覆盖源文件，编译器将发出此警告并跳过编写输出文件。
+
+有多种方法可以解决此问题，但所有这些方法都涉及配置编译器选项，因此建议您tsconfig.json在项目根目录中有一个文件来启用此功能。
+1.如果您根本不想在项目中包含JavaScript文件，只需将allowJs选项设置为false; 
+2.如果您确实要包含并编译这些JavaScript文件，请设置outDir选项或outFile选项以将发出的文件定向到其他位置，这样它们就不会与源文件冲突; 
+3.如果您只想包含JavaScript文件以进行编辑而不需要编译，请将noEmit编译器选项设置true为跳过发出检查。
+*/
