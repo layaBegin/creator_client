@@ -9,7 +9,6 @@ import CCHelper = require('../Shared/CCHelper')
 import Utils = require('../Shared/utils')
 import Enum = require('../Shared/enumeration')
 import Code = require('../Shared/code')
-import Api = require('../Shared/Api_old')
 import SDK = require('../Shared/SDK')
 import Animation = require('../Shared/Animation')
 import Player = require('../Models/Player')
@@ -64,6 +63,8 @@ export default class Init extends BaseComponent {
         node = scene.getChildByName("Matching");
         let matching = node.getComponent("Matching");
 
+        //声明常驻根节点，该节点不会被在场景切换中被销毁。
+        //目标节点必须位于为层级的根节点，否则无效。
         cc.game.addPersistRootNode(waiting.node);
         win.Waiting = waiting;
 
