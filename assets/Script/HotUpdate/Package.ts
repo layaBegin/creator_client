@@ -11,7 +11,7 @@ type UpdateError = {
 export interface ProjectManifest {
     version: string,
     zhName: string,        //追加中文名
-    packageUrl: string,
+    packageUrl: string,  //远程资源的本地缓存根路径
     remoteManifestUrl: string,
     remoteVersionUrl: string,
     assets: { [key: string]: { size: number, md5: string } },
@@ -37,7 +37,7 @@ export default class Package {
     TEMP_MANIFEST_FILENAME = "project.manifest.temp"
     TEMP_PACKAGE_SUFFIX = "_temp"
     MANIFEST_FILENAME = "project.manifest"
-    _storagePath: string = "";
+    _storagePath: string = "";        //本地存储路径，即包下载后的存储路径
     jsbAssetsManager: JsbAssetsManager = undefined;
     maxConcurrentTask: number = 5;
     _isUpdating: number = 0;
@@ -70,7 +70,7 @@ export default class Package {
         this.manifestNativeUrl = initManifest.nativeUrl;
 
         this._storagePath = SubpackManager.getInstance().addSearchPath(packageName);
-        cc.log('当前存储路径 : ' + this._storagePath);
+        cc.log('==当前存储路径 : ' + this._storagePath);
         this.getJsbAssetsMgrInstance();
 
         this.status = 0;        //未检测
@@ -128,6 +128,7 @@ export default class Package {
         return this._isUpdating;
     }
 
+    //第2步：检查热更
     checkUpdate(completeCallback?: CheckCallbackFunction) {
 
         this.checkCompleteCallback = completeCallback;
@@ -361,7 +362,7 @@ export default class Package {
          * 方案A. 性能最优:所有文件只做 size 校验
          * 方案B. 准确最优:zip热更 压缩文件做 size 校验 单文件做 MD5 校验
          */
-        let plan = "A";
+        let plan = "B";
         if (plan == "A") {
             return this.verifySize(path, asset);
         } else if (plan == "B") {
@@ -376,9 +377,9 @@ export default class Package {
         // }
     }
     verifySize(path: string, asset: any) {
-        console.time("计算size ");
+        console.time("verifySize 计算size ");
         let size = jsb.fileUtils.getFileSize(path);
-        console.timeEnd("计算size ");
+        console.timeEnd("verifySize 计算size ");
         if (size != asset.size) {
             return false;
         }
@@ -386,7 +387,7 @@ export default class Package {
     }
     verifyMD5(path: string, asset: any) {
         if (asset.compressed) {
-            cc.log("这是一个压缩文件:%s", path);    // 压缩文件直接通过解压自身校验
+            cc.log("===这是一个压缩文件:%s", path);    // 压缩文件直接通过解压自身校验
             return this.verifySize(path, asset);
         }
         // 检验MD5
@@ -439,5 +440,14 @@ export default class Package {
             return {};
         }
     }
+
+
+    //修改热更域名
+    setHotUpdateDomain(domain){
+        this.jsbAssetsManager.setHostUrl(domain)
+    }
+
+
+
 
 }

@@ -13,7 +13,7 @@ export default class SubpackManager {
     static _instance: SubpackManager = undefined;
     static getInstance() {
         if (!SubpackManager._instance) {
-            new SubpackManager();
+            SubpackManager._instance = new SubpackManager();
         }
         return SubpackManager._instance;
     }

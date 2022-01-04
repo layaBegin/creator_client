@@ -79,6 +79,12 @@ export default class JsbAssetsManager {
 
     constructor(manifestUrl: string, storagePath: string, versionCompareHandle?: (localVersion: string, RemotVersion: string) => number) {
         this._storagePath = storagePath;
+        /**
+         * 建立jsb.AssetsManager 的时候得知道2个路径：
+         * 1，本地manifest 的原生平台对应路径；
+         * 2，热更资源下载之后的对应平台存储路径；
+         *
+         */
         this._jsbAssetManager = new jsb.AssetsManager(manifestUrl, storagePath, versionCompareHandle);
     }
     getState(): State {
@@ -134,10 +140,11 @@ export default class JsbAssetsManager {
      * @param packageName 包名
      */
     static addSearchPath(packageName: string) {
+        if  (!CC_JSB) return ""
         let rootPath = jsb.fileUtils.getWritablePath();
         let pakcageUrl = rootPath + "hotAssets/" + packageName + "/";
-        let mainUrl = rootPath + "hotAssets/" + "Main/";
         var searchPaths: string[] = jsb.fileUtils.getSearchPaths();
+        console.log("==searchPaths:" + searchPaths);
         // 只保存主包 搜索路径 其他子包搜索路径再启动后直接设置 jsb.fileUtils.setSearchPaths
         if (packageName == "Main") {
             localStorage.setItem('HotUpdateSearchPaths', JSON.stringify([pakcageUrl]));
@@ -173,6 +180,10 @@ export default class JsbAssetsManager {
         return (bytes / Math.pow(k, i)).toPrecision(3) + '' + sizes[i];
     }
 
+
+    setHostUrl(domain) {
+        this._jsbAssetManager.setHostUrl(domain);
+    }
 }
 
 function ArrayClear(arr: string[]) {

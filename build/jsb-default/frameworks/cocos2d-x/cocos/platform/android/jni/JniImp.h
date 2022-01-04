@@ -28,6 +28,8 @@
 
 typedef void (*EditTextCallback)(const std::string& text, void* ctx);
 
+extern bool getApplicationExited();
+
 extern void restartJSVM();
 extern void exitApplication();
 
@@ -40,6 +42,7 @@ extern int getDeviceSampleRateJNI();
 extern int getDeviceAudioBufferSizeInFramesJNI();
 
 extern std::string getCurrentLanguageJNI();
+extern std::string getCurrentLanguageCodeJNI();
 extern std::string getSystemVersionJNI();
 extern bool openURLJNI(const std::string& url);
 extern void copyTextToClipboardJNI(const std::string& text);
@@ -48,3 +51,4 @@ extern void setGameInfoDebugViewTextJNI(int index, const std::string& text);
 extern void setJSBInvocationCountJNI(int count);
 extern void openDebugViewJNI();
 extern void disableBatchGLCommandsToNativeJNI();
+extern int getAndroidSDKInt();

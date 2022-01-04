@@ -44,8 +44,9 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../include \
                     $(LOCAL_PATH)/../../platform/android \
                     $(LOCAL_PATH)/../../../external \
                     $(LOCAL_PATH)/../../../external/sources
-
+                    
 LOCAL_STATIC_LIBRARIES += libvorbisidec libpvmp3dec
+
 include $(BUILD_STATIC_LIBRARY)
 
 $(call import-module,sources/tremolo)

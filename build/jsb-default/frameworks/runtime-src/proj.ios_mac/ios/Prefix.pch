@@ -5,12 +5,4 @@
 #ifdef __OBJC__
 	#import <Foundation/Foundation.h>
 	#import <UIKit/UIKit.h>
-
-#endif
-
-#ifndef PrefixHeader_pch
-#define PrefixHeader_pch
-
-#define  KEY_UUID @"com.aurora.chuangshiqp_uuid"
-
 #endif

@@ -47,7 +47,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 {
     se::ScriptEngine* se = se::ScriptEngine::getInstance();
 
-    jsb_set_xxtea_key("0385d9d1-8a78-40");
+    jsb_set_xxtea_key("");
     jsb_init_file_operation_delegate();
 
 #if defined(COCOS2D_DEBUG) && (COCOS2D_DEBUG > 0)
@@ -76,13 +76,13 @@ bool AppDelegate::applicationDidFinishLaunching()
 }
 
 // This function will be called when the app is inactive. When comes a phone call,it's be invoked too
-void AppDelegate::applicationDidEnterBackground()
+void AppDelegate::onPause()
 {
-    EventDispatcher::dispatchEnterBackgroundEvent();
+    EventDispatcher::dispatchOnPauseEvent();
 }
 
 // this function will be called when the app is active again
-void AppDelegate::applicationWillEnterForeground()
+void AppDelegate::onResume()
 {
-    EventDispatcher::dispatchEnterForegroundEvent();
+    EventDispatcher::dispatchOnResumeEvent();
 }

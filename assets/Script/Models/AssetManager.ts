@@ -133,6 +133,13 @@ export class AssetManager {
         return [null, outArray, outUrls];
     }
 
+
+    loadResDir1(dir: string, onComplete?: (errors: any, assetRes: cc.Asset[], urlRes: string[]) => void){
+
+        cc.loader.loadResDir(dir,cc.Asset,onComplete)
+
+    }
+
     loadResDirs(dirs: string[],
         onProgress?: (c: number, t: number, item: any) => void,
         onComplete?: (errors: any, assetRes: cc.Asset[], urlRes: string[]) => void,

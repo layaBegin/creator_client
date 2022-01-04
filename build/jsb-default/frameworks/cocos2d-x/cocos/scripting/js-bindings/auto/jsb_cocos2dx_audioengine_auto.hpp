@@ -26,6 +26,7 @@ SE_DECLARE_FUNC(js_audioengine_AudioEngine_pause);
 SE_DECLARE_FUNC(js_audioengine_AudioEngine_end);
 SE_DECLARE_FUNC(js_audioengine_AudioEngine_getMaxAudioInstance);
 SE_DECLARE_FUNC(js_audioengine_AudioEngine_isEnabled);
+SE_DECLARE_FUNC(js_audioengine_AudioEngine_getDurationFromFile);
 SE_DECLARE_FUNC(js_audioengine_AudioEngine_getCurrentTime);
 SE_DECLARE_FUNC(js_audioengine_AudioEngine_setMaxAudioInstance);
 SE_DECLARE_FUNC(js_audioengine_AudioEngine_isLoop);

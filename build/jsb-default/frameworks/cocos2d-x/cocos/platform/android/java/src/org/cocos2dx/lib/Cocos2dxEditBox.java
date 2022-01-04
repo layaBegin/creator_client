@@ -39,9 +39,7 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +49,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -83,11 +82,13 @@ public class Cocos2dxEditBox {
         private float mLineWidth = 2f;
         private boolean keyboardVisible = false;
         private int mScreenHeight;
+        private int mTopMargin = 0;
 
         public  Cocos2dxEditText(Cocos2dxActivity context){
             super(context);
             //remove focus border
             this.setBackground(null);
+            this.setTextColor(Color.BLACK);
             mScreenHeight = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).
                     getDefaultDisplay().getHeight();
             mPaint = new Paint();
@@ -193,7 +194,7 @@ public class Cocos2dxEditBox {
             else if (inputType.contentEquals("email"))
                 this.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
             else if (inputType.contentEquals("number"))
-                this.setInputType(InputType.TYPE_CLASS_NUMBER);
+                this.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
             else if (inputType.contentEquals("phone"))
                 this.setInputType(InputType.TYPE_CLASS_PHONE);
             else if (inputType.contentEquals("password"))
@@ -242,12 +243,24 @@ public class Cocos2dxEditBox {
                             Cocos2dxEditBox.this.hide();
                         }
                     }
+
+                    if (Cocos2dxEditText.this.mTopMargin == 0 && r.bottom != getRootView().getHeight()) {
+                        Cocos2dxEditText.this.setTopMargin(r.bottom);
+                    }
                 }
             });
         }
+
+        private void setTopMargin(int topMargin) {
+            mTopMargin = topMargin;
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mEditText.getLayoutParams();
+            layoutParams.topMargin = mTopMargin - getHeight();
+            setLayoutParams(layoutParams);
+            requestLayout();
+        }
     }
 
-    public Cocos2dxEditBox(Cocos2dxActivity context, RelativeLayout layout) {
+    public Cocos2dxEditBox(Cocos2dxActivity context, FrameLayout layout) {
         Cocos2dxEditBox.sThis = this;
         mActivity = context;
         this.addItems(context, layout);
@@ -265,7 +278,7 @@ public class Cocos2dxEditBox {
     /***************************************************************************************
      Private functions.
      **************************************************************************************/
-    private void addItems(Cocos2dxActivity context, RelativeLayout layout) {
+    private void addItems(Cocos2dxActivity context, FrameLayout layout) {
         RelativeLayout myLayout = new RelativeLayout(context);
         this.addEditText(context, myLayout);
         this.addButton(context, myLayout);

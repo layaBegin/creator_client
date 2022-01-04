@@ -105,11 +105,11 @@ public:
     virtual ~Application();
     
     virtual bool applicationDidFinishLaunching();
-    virtual void applicationDidEnterBackground();
-    virtual void applicationWillEnterForeground();
+    virtual void onPause();
+    virtual void onResume();
     
     inline void* getView() const { return _view; }
-    inline Scheduler* getScheduler() const { return _scheduler.get(); }
+    inline std::shared_ptr<Scheduler> getScheduler() const { return _scheduler; }
     inline RenderTexture* getRenderTexture() const { return _renderTexture; }
     
     void runOnMainThread();
@@ -137,6 +137,9 @@ public:
      @return Current language iso 639-1 code.
      */
     std::string getCurrentLanguageCode() const;
+    
+    const cocos2d::Vec2& getViewSize() const;
+    void updateViewSize(int width, int height);
 
     /**
      @brief Get current display stats.
@@ -204,6 +207,8 @@ private:
     bool _multiTouch = false;
     bool _isStarted = false;
     bool _isDownsampleEnabled = false;
+
+    cocos2d::Vec2 _viewSize;
 };
 
 // end of platform group

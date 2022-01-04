@@ -23,11 +23,12 @@
  ****************************************************************************/
 #pragma once
 // index buffer init capacity
-#define INIT_IB_BUFFER_SIZE 1024000
-// can fill material data max capacity
-#define MAX_MATERIAL_BUFFER_SIZE 512
+#define INIT_INDEX_BUFFER_SIZE 1024000
+// max vertex buffer size
+#define MAX_VERTEX_BUFFER_SIZE 65535
+
 // fill debug data max capacity
-#define MAX_DEBUG_BUFFER_SIZE 40960
+#define MAX_DEBUG_BUFFER_SIZE 409600
 // type array pool min size
 #define MIN_TYPE_ARRAY_SIZE 1024
 

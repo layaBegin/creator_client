@@ -56,6 +56,7 @@ public class Cocos2dxRenderer implements GLSurfaceView.Renderer {
     private String mDefaultResourcePath = "";
     private long mOldNanoTime = 0;
     private long mFrameCount = 0;
+    private boolean mNeedToPause = false;
 
     // ===========================================================
     // Constructors
@@ -100,6 +101,7 @@ public class Cocos2dxRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(final GL10 GL10, final EGLConfig EGLConfig) {
+        mNativeInitCompleted = false;
         Cocos2dxRenderer.nativeInit(this.mScreenWidth, this.mScreenHeight, mDefaultResourcePath);
         mOldNanoTime = System.nanoTime();
         this.mLastTickInNanoSeconds = System.nanoTime();
@@ -121,6 +123,9 @@ public class Cocos2dxRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(final GL10 gl) {
+        if (mNeedToPause)
+            return;
+
         if (mNeedShowFPS) {
             /////////////////////////////////////////////////////////////////////
             //IDEA: show FPS in Android Text control rather than outputing log.
@@ -177,27 +182,50 @@ public class Cocos2dxRenderer implements GLSurfaceView.Renderer {
     private static native void nativeOnPause();
     private static native void nativeOnResume();
 
+    // This function will be invoked in main thread.
+    public void setPauseInMainThread(boolean value) {
+        mNeedToPause = value;
+    }
+
     public void handleActionDown(final int id, final float x, final float y) {
+        if (! mNativeInitCompleted)
+            return;
+
         Cocos2dxRenderer.nativeTouchesBegin(id, x, y);
     }
 
     public void handleActionUp(final int id, final float x, final float y) {
+        if (! mNativeInitCompleted)
+            return;
+
         Cocos2dxRenderer.nativeTouchesEnd(id, x, y);
     }
 
     public void handleActionCancel(final int[] ids, final float[] xs, final float[] ys) {
+        if (! mNativeInitCompleted)
+            return;
+
         Cocos2dxRenderer.nativeTouchesCancel(ids, xs, ys);
     }
 
     public void handleActionMove(final int[] ids, final float[] xs, final float[] ys) {
+        if (! mNativeInitCompleted)
+            return;
+
         Cocos2dxRenderer.nativeTouchesMove(ids, xs, ys);
     }
 
     public void handleKeyDown(final int keyCode) {
+        if (! mNativeInitCompleted)
+            return;
+
         Cocos2dxRenderer.nativeKeyEvent(keyCode, true);
     }
 
     public void handleKeyUp(final int keyCode) {
+        if (! mNativeInitCompleted)
+            return;
+
         Cocos2dxRenderer.nativeKeyEvent(keyCode, false);
     }
 

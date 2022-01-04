@@ -2,6 +2,7 @@ import ProgressBar from "../Component/ProgressBar";
 import Package, { PackageStatus } from "./Package";
 import { LoadTask } from "../Models/LoadTask";
 import { EventCode } from "./JsbAssetsManager";
+import ConsConfig from "../Shared/ConstantConfig";
 
 const { ccclass, property } = cc._decorator;
 
@@ -45,24 +46,28 @@ export default class HotUpdate extends cc.Component {
     updateConfig = {
         "hotUpdate": true,                              // 是否开启热更
         "bigUpdateDownloadUrl": "http://www.baidu.com", // 大版本下载地址 大版本更新逻辑 第一版本号不同时需要重新下载App
-        "forceBigUpdate": false,                        // 强制大版本热更新
+        "forceBigUpdate": true,                        // 强制大版本热更新
     }
     onLoad() {
     }
 
     async startUpdate(completeCallback: (code: 0 | 1 | 2) => void) {
         this.completeCallback = completeCallback;
+        //
+        // if (!Global.Constant.isHotUpdate || !CC_JSB) {
+        //     console.log("跳过热更新");
+        //     this.updateEnd(0);
+        //     return;
+        // }
 
-        if (!Global.Constant.isHotUpdate || !CC_JSB) {
-            console.log("跳过热更新");
-            this.updateEnd(0);
-            return;
-        }
+        console.time("加载主清单文件")
+        //先加载本地主清单
+        this.mainManifest = await this.loadOneManifest("Main");
+        //先check 大厅版本是否要热更
 
-        console.time("加载所有清单文件")
-        await this.loadAllManifest();
-        console.timeEnd("加载所有清单文件")
+        console.timeEnd("加载主清单文件")
 
+        //初始化中
         this.mainPack = new Package(this.mainManifest);
 
         // if (!CC_JSB) {
@@ -73,78 +78,92 @@ export default class HotUpdate extends cc.Component {
         this.node.active = true;
 
         this.progressBar.init("正在检查版本...");
-        this.getConfig(async (code: number) => {
-            if (this.updateConfig.forceBigUpdate || await this.checkBigUpdate()) {
-                Confirm.show("当前版本过低,点击确定下载最新版本", () => {
-                    cc.sys.openURL(this.updateConfig.bigUpdateDownloadUrl);
-                });
-                return;
-            }
+        //替换热更域名
+        if (ConsConfig.hotUpdateDomain){
+            this.mainPack.setHotUpdateDomain(ConsConfig.hotUpdateDomain);
+        }
 
-            if (this.updateConfig.hotUpdate) {
-                // 生成所有子包对象
-                await this.checkSubPackVersion();
+        this.mainPack.checkUpdate((err, isNew)=>{
+            if  (this.mainPack.status = PackageStatus.FIND_NEWVERSION){
+                console.log("===发现新版本，可以热更");
+            }else{
+                console.log("===检查热更结果："+ err.msg);
 
-                let err = await this.downloadGameCommon();
-                if (err) {
-                    let downloadCount = Number(cc.sys.localStorage.getItem("downloadCount"));
-                    downloadCount = isNaN(downloadCount) ? 0 : downloadCount;
-                    if (downloadCount >= 3) {
-                        cc.sys.localStorage.setItem("downloadCount", 0);  // 清 0
-                        Confirm.show("加载网络资源失败,请联系客服", () => {
-                            // 打开客服界面
-                        });
-                    }
-                    else {
-                        downloadCount++;
-                        cc.sys.localStorage.setItem("downloadCount", downloadCount);
-                        Confirm.show("加载网络资源失败,将尝试获取失败资源", () => {
-                            cc.game.restart();
-                        });
-                    }
-                    return;
-                }
-                cc.sys.localStorage.setItem("downloadCount", 0);
-                // 开始热更
-                this.progressBar.init("正在更新游戏大厅...");
-                // let mainPack = new Package(this.mainManifest);
-                if (this.mainPack.status != PackageStatus.ALL_READY) {
-                    this.mainPack.update((df: number, tf: number, db: number, tb: number) => {
-                        if (tb != 0) {
-                            this.progressBar.progress = db / tb;
-                        }
-                    }, (err) => {
-                        if (!err) {
-                            console.log("主包热更新成功");
-                            this.progressBar.tip = "更新完成";
-                            cc.game.restart();
-                        }
-                        else {
-                            if (err.code == EventCode.ALREADY_UP_TO_DATE) {
-                                this.updateEnd(0);
-                            }
-                            else {
-                                console.log("主包热更新失败:: " + err.code, + " " + err.msg);
-                                this.progressBar.tip = "更新失败";
-                                Confirm.show("更新版本失败,点击确认重试更新版本,点击取消下载最新版本", () => {
-                                    cc.game.restart();
-                                }, () => {
-                                    cc.sys.openURL(this.updateConfig.bigUpdateDownloadUrl);
-                                });
-                                // this.updateEnd(1);
-                            }
-                        }
-                    });
-                }
-                else {
-                    this.updateEnd(0);  // 已经是最新版本无须更新
-                }
             }
-            else {
-                // this.updateEnd(code);
-                this.updateEnd(2);
-            }
-        });
+        })
+        //await this.checkBigUpdate()
+        // this.getConfig(async (code: number) => {
+        //     if (this.updateConfig.forceBigUpdate || await this.checkBigUpdate()) {
+        //         Confirm.show("当前版本过低,点击确定下载最新版本", () => {
+        //             cc.sys.openURL(this.updateConfig.bigUpdateDownloadUrl);
+        //         });
+        //         return;
+        //     }
+        //
+        //     if (this.updateConfig.hotUpdate) {
+        //         // 生成所有子包对象
+        //         await this.checkSubPackVersion();
+        //
+        //         let err = await this.downloadGameCommon();
+        //         if (err) {
+        //             let downloadCount = Number(cc.sys.localStorage.getItem("downloadCount"));
+        //             downloadCount = isNaN(downloadCount) ? 0 : downloadCount;
+        //             if (downloadCount >= 3) {
+        //                 cc.sys.localStorage.setItem("downloadCount", 0);  // 清 0
+        //                 Confirm.show("加载网络资源失败,请联系客服", () => {
+        //                     // 打开客服界面
+        //                 });
+        //             }
+        //             else {
+        //                 downloadCount++;
+        //                 cc.sys.localStorage.setItem("downloadCount", downloadCount);
+        //                 Confirm.show("加载网络资源失败,将尝试获取失败资源", () => {
+        //                     cc.game.restart();
+        //                 });
+        //             }
+        //             return;
+        //         }
+        //         cc.sys.localStorage.setItem("downloadCount", 0);
+        //         // 开始热更
+        //         this.progressBar.init("正在更新游戏大厅...");
+        //         // let mainPack = new Package(this.mainManifest);
+        //         if (this.mainPack.status != PackageStatus.ALL_READY) {
+        //             this.mainPack.update((df: number, tf: number, db: number, tb: number) => {
+        //                 if (tb != 0) {
+        //                     this.progressBar.progress = db / tb;
+        //                 }
+        //             }, (err) => {
+        //                 if (!err) {
+        //                     console.log("主包热更新成功");
+        //                     this.progressBar.tip = "更新完成";
+        //                     cc.game.restart();
+        //                 }
+        //                 else {
+        //                     if (err.code == EventCode.ALREADY_UP_TO_DATE) {
+        //                         this.updateEnd(0);
+        //                     }
+        //                     else {
+        //                         console.log("主包热更新失败:: " + err.code, + " " + err.msg);
+        //                         this.progressBar.tip = "更新失败";
+        //                         Confirm.show("更新版本失败,点击确认重试更新版本,点击取消下载最新版本", () => {
+        //                             cc.game.restart();
+        //                         }, () => {
+        //                             cc.sys.openURL(this.updateConfig.bigUpdateDownloadUrl);
+        //                         });
+        //                         // this.updateEnd(1);
+        //                     }
+        //                 }
+        //             });
+        //         }
+        //         else {
+        //             this.updateEnd(0);  // 已经是最新版本无须更新
+        //         }
+        //     }
+        //     else {
+        //         // this.updateEnd(code);
+        //         this.updateEnd(2);
+        //     }
+        // });
     }
 
     async checkSubPackVersion() {
@@ -237,12 +256,42 @@ export default class HotUpdate extends cc.Component {
         cc.log("正在请求热更配置::" + Global.Constant.updateConfigAddress);
     }
 
+    checkHallUpdate(){
+
+    }
+
+    async loadOneManifest(packageName : string) {
+        return new Promise<cc.Asset>((resolve) => {
+            try {
+                AssetMgr.loadResDir1("Manifest/"  + packageName,  (errors, assetRes, urlRes) => {
+                    let mainManifest : cc.Asset = null
+                    for (let i = 0; i < urlRes.length; i++) {
+                        console.log("====urlRes[i]:"+urlRes[i]);
+                        if (packageName == "Main") {
+                            if  (urlRes[i].indexOf("project") >= 0){
+                                mainManifest = assetRes[i];    // 设置主包
+
+                            }
+                        }
+                        else if (urlRes[i].indexOf("project") >= 0) {
+                            mainManifest = assetRes[i];    // 设置子包
+                        }
+                    }
+                    resolve(mainManifest);
+                });
+            } catch (error) {
+                resolve(null);
+            }
+        })
+    }
+
     async loadAllManifest() {
 
         return new Promise<void>((resolve) => {
             try {
                 AssetMgr.loadResDirs(["Manifest"], undefined, (errors, assetRes, urlRes) => {
                     for (let i = 0; i < urlRes.length; i++) {
+                        console.log("====urlRes[i]:"+urlRes[i]);
                         if (urlRes[i].indexOf("Main/project") >= 0) {
                             this.mainManifest = assetRes[i];    // 设置主包
                         }
@@ -261,5 +310,33 @@ export default class HotUpdate extends cc.Component {
     updateEnd(code: number = 0) {
         // this.node.active = false;
         typeof this.completeCallback == "function" && this.completeCallback(code);
+    }
+
+
+
+    private checkDomainConnect(domain): Promise<boolean> {
+        return new Promise(resolve => {
+            let xhr = new XMLHttpRequest()
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    resolve(true)
+                } else {
+                    resolve(false)
+                }
+            }.bind(this)
+
+            xhr.onerror = function () {
+                resolve(false)
+            }
+
+            xhr.open("GET", domain, true)
+            xhr.send()
+
+            // 5秒没有回调false
+            this.scheduleOnce(function () {
+                resolve(false)
+            }, 5)
+        })
     }
 }

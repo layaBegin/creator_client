@@ -29,6 +29,9 @@
 #include "base/ccMacros.h"
 #include "audio/include/Export.h"
 
+#include "scripting/js-bindings/event/EventDispatcher.h"
+#include "scripting/js-bindings/event/CustomEventTypes.h"
+
 #include <functional>
 #include <list>
 #include <string>
@@ -219,6 +222,14 @@ public:
     static float getDuration(int audioID);
 
     /** 
+    * Gets the duration of an audio file.
+    *
+    * @param filePath The path of an audio file.
+    * @return The duration of an audio file.
+    */
+    static float getDurationFromFile(const std::string& filePath);
+
+    /** 
      * Returns the state of an audio instance.
      *
      * @param audioID An audioID returned by the play2d function.
@@ -363,6 +374,14 @@ protected:
     static AudioEngineThreadPool* s_threadPool;
     
     static bool _isEnabled;
+    
+private:
+    static uint32_t _onPauseListenerID;
+    static uint32_t _onResumeListenerID;
+    static std::vector<int> _breakAudioID;
+    
+    static void onPause(const CustomEvent&);
+    static void onResume(const CustomEvent&);
     
     friend class AudioEngineImpl;
 };

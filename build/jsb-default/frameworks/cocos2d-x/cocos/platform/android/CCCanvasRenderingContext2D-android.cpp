@@ -4,6 +4,7 @@
 
 #include "cocos/scripting/js-bindings/jswrapper/SeApi.h"
 #include "platform/android/jni/JniHelper.h"
+#include "platform/android/jni/JniImp.h"
 
 #include <regex>
 
@@ -213,6 +214,28 @@ public:
     {
         return _data;
     }
+    
+#define CLAMP(V, HI) std::min( (V), (HI) )
+    void unMultiplyAlpha(unsigned char* ptr, ssize_t size)
+    {
+        // Android source data is not premultiplied alpha when API >= 19
+        // please refer CanvasRenderingContext2DImpl::recreateBuffer(float w, float h)
+        // in CanvasRenderingContext2DImpl.java
+//        if (getAndroidSDKInt() >= 19)
+//            return;
+
+        float alpha;
+        for (int i = 0; i < size; i += 4)
+        {
+            alpha = (float)ptr[i + 3];
+            if (alpha > 0)
+            {
+                ptr[i] = CLAMP((int)((float)ptr[i] / alpha * 255), 255);
+                ptr[i+1] = CLAMP((int)((float)ptr[i+1] / alpha * 255), 255);
+                ptr[i+2] =  CLAMP((int)((float)ptr[i+2] / alpha * 255), 255);
+            }
+        }
+    }
 
     void fillData()
     {
@@ -220,6 +243,7 @@ public:
         jsize len  = JniHelper::getEnv()->GetArrayLength(arr);
         jbyte* jbarray = (jbyte *)malloc(len * sizeof(jbyte));
         JniHelper::getEnv()->GetByteArrayRegion(arr,0,len,jbarray);
+        unMultiplyAlpha( (unsigned char*) jbarray, len);
         _data.fastSet((unsigned char*) jbarray, len); //IDEA: DON'T create new jbarray every time.
         JniHelper::getEnv()->DeleteLocalRef(arr);
     }

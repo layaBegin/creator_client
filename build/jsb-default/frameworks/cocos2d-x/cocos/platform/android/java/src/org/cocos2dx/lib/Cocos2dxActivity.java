@@ -42,8 +42,8 @@ import android.util.Log;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.cocos2dx.lib.Cocos2dxHelper.Cocos2dxHelperListener;
@@ -64,7 +64,7 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
     // ===========================================================
     private static Cocos2dxActivity sContext = null;
 
-    protected RelativeLayout mFrameLayout = null;
+    protected FrameLayout mFrameLayout = null;
     
     private Cocos2dxGLSurfaceView mGLSurfaceView = null;
     private int[] mGLContextAttrs = null;
@@ -73,6 +73,8 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
     private Cocos2dxWebViewHelper mWebViewHelper = null;
     private boolean hasFocus = false;
     private Cocos2dxEditBox mEditBox = null;
+    private boolean gainAudioFocus = false;
+    private boolean paused = true;
 
     // DEBUG VIEW BEGIN
     private LinearLayout mLinearLayoutForDebugView;
@@ -253,7 +255,7 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
         ViewGroup.LayoutParams frameLayoutParams =
                 new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                                            ViewGroup.LayoutParams.MATCH_PARENT);
-        mFrameLayout = new RelativeLayout(this);
+        mFrameLayout = new FrameLayout(this);
         mFrameLayout.setLayoutParams(frameLayoutParams);
 
         Cocos2dxRenderer renderer = this.addSurfaceView();
@@ -276,6 +278,18 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
         });
     }
 
+    public void setEnableAudioFocusGain(boolean value) {
+        if(gainAudioFocus != value) {
+            if(!paused) {
+                if (value)
+                    Cocos2dxAudioFocusManager.registerAudioFocusListener(this);
+                else
+                    Cocos2dxAudioFocusManager.unregisterAudioFocusListener(this);
+            }
+            gainAudioFocus = value;
+        }
+    }
+    
     public Cocos2dxGLSurfaceView onCreateView() {
         Cocos2dxGLSurfaceView glSurfaceView = new Cocos2dxGLSurfaceView(this);
         //this line is need on some device if we specify an alpha bits
@@ -296,8 +310,6 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
         Log.d(TAG, "Cocos2dxActivity onCreate: " + this + ", savedInstanceState: " + savedInstanceState);
         super.onCreate(savedInstanceState);
 
-        Utils.setActivity(this);
-
         // Workaround in https://stackoverflow.com/questions/16283079/re-launch-of-activity-on-home-button-but-only-the-first-time/16447508
         if (!isTaskRoot()) {
             // Android launched another instance of the root activity into an existing task
@@ -307,6 +319,8 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
             Log.w(TAG, "[Workaround] Ignore the activity started from icon!");
             return;
         }
+
+        Utils.setActivity(this);
 
         Utils.hideVirtualButton();
 
@@ -339,8 +353,10 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
     @Override
     protected void onResume() {
     	Log.d(TAG, "onResume()");
+        paused = false;
         super.onResume();
-        Cocos2dxAudioFocusManager.registerAudioFocusListener(this);
+        if(gainAudioFocus)
+            Cocos2dxAudioFocusManager.registerAudioFocusListener(this);
         Utils.hideVirtualButton();
        	resumeIfHasFocus();
     }
@@ -355,7 +371,7 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
     }
 
     private void resumeIfHasFocus() {
-        if(hasFocus) {
+        if(hasFocus && !paused) {
             Utils.hideVirtualButton();
             Cocos2dxHelper.onResume();
             mGLSurfaceView.onResume();
@@ -365,19 +381,27 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
     @Override
     protected void onPause() {
         Log.d(TAG, "onPause()");
+        paused = true;
         super.onPause();
-        Cocos2dxAudioFocusManager.unregisterAudioFocusListener(this);
+        if(gainAudioFocus)
+            Cocos2dxAudioFocusManager.unregisterAudioFocusListener(this);
         Cocos2dxHelper.onPause();
         mGLSurfaceView.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        Cocos2dxAudioFocusManager.unregisterAudioFocusListener(this);
+        super.onDestroy();
+
+        // Workaround in https://stackoverflow.com/questions/16283079/re-launch-of-activity-on-home-button-but-only-the-first-time/16447508
+        if (!isTaskRoot()) {
+            return;
+        }
+
+        if(gainAudioFocus)
+            Cocos2dxAudioFocusManager.unregisterAudioFocusListener(this);
         Cocos2dxHelper.unregisterBatteryLevelReceiver(this);;
         CanvasRenderingContext2DImpl.destroy();
-
-        super.onDestroy();
 
         Log.d(TAG, "Cocos2dxActivity onDestroy: " + this + ", mGLSurfaceView" + mGLSurfaceView);
         if (mGLSurfaceView != null) {

@@ -1,7 +1,7 @@
 {
   "ver": "1.0.1",
   "uuid": "c677aa3b-21b8-40a6-b16d-9b0867ed9504",
-  "isSubpackage": false,
-  "subpackageName": "",
+  "isSubpackage": true,
+  "subpackageName": "ErRenNiuniu",
   "subMetas": {}
 }

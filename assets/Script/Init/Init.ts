@@ -16,7 +16,7 @@ import PlayerWechat = require('../Models/PlayerWechat')
 import VipConfig = require('../Models/VipConfig')
 import Data = require('../Models/Data');
 import AgentProfit = require('../Models/AgentProfit')
-import { AssetReleaseManager } from "../Models/AssetReleaseManager";
+//import { AssetReleaseManager } from "../Models/AssetReleaseManager";
 import { AssetManager } from "../Models/AssetManager";
 import { UIManager } from "../Models/UIManager";
 import { MessageManager } from "../Manager/MessageManager";
@@ -50,7 +50,7 @@ export default class Init extends BaseComponent {
     onLoad() {
         cc.game.setFrameRate(45);           // 强制帧率 45
 
-        cc.debug.setDisplayStats(false);    // 强制不显示 fps
+        //cc.debug.setDisplayStats(false);    // 强制不显示 fps
         // let win: any = window;
         // 设置常驻节点
         let scene = cc.director.getScene();
@@ -102,13 +102,11 @@ export default class Init extends BaseComponent {
         Global.DialogManager.destroyAllDialog = Global.UIManager.destroyAllUI.bind(Global.UIManager);
 
         // 初始化网络
-        // Global.NetworkLogic.init();
 
         Global.AssetManager = AssetMgr;
-        Global.AssetReleaseManager = AssetReleaseMgr;
-        Global.AssetReleaseManager.addAssetCache("_cache", AssetMgr);
-        // Global.AssetReleaseManager.addAssetCache("loadedDialogPrefabs", Global.DialogManager);
-        Global.AssetReleaseManager.addAssetCache("_loadedUI", Global.UIManager);
+        //Global.AssetReleaseManager = AssetReleaseMgr;
+        //Global.AssetReleaseManager.addAssetCache("_cache", AssetMgr);
+        //Global.AssetReleaseManager.addAssetCache("_loadedUI", Global.UIManager);
 
         cc.game.on(cc.game.EVENT_HIDE, this.onEventHide.bind(this));        //危险代码 可能造成多次注册事件
         cc.game.on(cc.game.EVENT_SHOW, this.onEventShow.bind(this));
@@ -136,7 +134,7 @@ export default class Init extends BaseComponent {
         win.LockMgr = new LockManager();
         win.Debug = new Debugger();
         win.ViewMgr = new ViewManager();
-        win.AssetReleaseMgr = new AssetReleaseManager();
+        //win.AssetReleaseMgr = new AssetReleaseManager();
         win.AssetMgr = new AssetManager();
         win.GameConfig = new GameConfig();
         win.AudioMgr = new AudioManager();

@@ -74,19 +74,29 @@ static std::string getFontFamilyByCompareAvailableFontFamilyNames(const std::vec
     size_t afterLen = after.size();
     if (afterLen > beforeLen)
     {
-        for (size_t i = 0; i < beforeLen; ++i)
+        for(size_t i = 0;i < afterLen; ++i)
         {
-            if (before[i] != after[i])
+            bool hasFont = false;
+            for(size_t j = 0;j < beforeLen; ++j)
+            {
+                if (after[i] == before[j])
+                {
+                    hasFont = true;
+                    break;
+                }
+            }
+
+            if (!hasFont)
             {
                 ret = after[i];
                 break;
             }
+
+            if (ret.empty())
+                ret = after.back();
+
         }
-
-        if (ret.empty())
-            ret = after.back();
     }
-
     return ret;
 }
 
@@ -101,6 +111,13 @@ static bool JSB_loadFont(se::State& s)
         std::string originalFamilyName;
         ok &= seval_to_std_string(args[0], &originalFamilyName);
         SE_PRECONDITION2(ok, false, "JSB_loadFont : Error processing argument: originalFamilyName");
+
+        // Don't reload font again to avoid memory leak.
+        if (_fontFamilyNameMap.find(originalFamilyName) != _fontFamilyNameMap.end())
+        {
+            s.rval().setString(_fontFamilyNameMap[originalFamilyName]);
+            return true;
+        }
 
         std::string source;
         ok &= seval_to_std_string(args[1], &source);

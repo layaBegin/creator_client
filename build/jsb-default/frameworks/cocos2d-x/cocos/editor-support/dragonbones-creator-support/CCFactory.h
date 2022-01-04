@@ -106,7 +106,6 @@ public:
             eventManager->retain();
 
             _dragonBonesInstance = new DragonBones(eventManager);
-            // _dragonBonesInstance->yDown = false;
 
             cocos2d::middleware::MiddlewareManager::getInstance()->addTimer(this);
         }
@@ -118,6 +117,13 @@ public:
     {
         _dragonBonesInstance->advanceTime(dt);
     }
+    
+    virtual void render(float dt) override
+    {
+        _dragonBonesInstance->render();
+    }
+
+    virtual uint32_t getRenderOrder() const override { return 0; }
     
     /**
      * @note When script engine clean up is trigger,will stop dragonbones timer.
@@ -230,14 +236,31 @@ public:
         return _dragonBonesInstance->getClock();
     }
     
-    void add(Armature* armature){
+    void add(Armature* armature)
+    {
         _dragonBonesInstance->getClock()->add(armature);
     }
     
-    void remove(Armature* armature){
+    void remove(Armature* armature)
+    {
         _dragonBonesInstance->getClock()->remove(armature);
     }
     
+    void setTimeScale(float timeScale)
+    {
+        _dragonBonesInstance->getClock()->timeScale = timeScale;
+    }
+    
+	float getTimeScale()
+	{
+		return _dragonBonesInstance->getClock()->timeScale;
+	}
+
+	DragonBones* getDragonBones()
+	{
+		return _dragonBonesInstance;
+	}
+
     void removeTextureAtlasDataByIndex(const std::string& name, int textureIndex);
     void removeDragonBonesDataByUUID(const std::string& uuid, bool disposeData = true);
     

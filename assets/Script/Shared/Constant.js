@@ -2,6 +2,8 @@ let Constant = module.exports = {};
 /**
  * 服务器可选列表
  */
+
+
 Constant.serverList = [
     ["http://192.168.17.119:13000", "http://192.168.17.119:14000", "大松树"],
     ["http://192.168.17.131:13000", "http://192.168.17.131:14000", "老挑"],
@@ -27,3 +29,4 @@ Constant.updateConfigAddress = "http://okqp-update.com:81/updateConfig.json";
  * 与远程配置同为 true 时 才开启热更
  */
 Constant.isHotUpdate = true;
+Constant.hotUpdateDomain = "http://18.163.83.106"
